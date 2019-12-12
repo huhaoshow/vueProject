@@ -6,6 +6,10 @@
 <script>
 
 export default {
+  // 组件加载完成钩子函数
+  mounted () {
+    this.$toast('登录成功')
+  }
 }
 </script>
 
