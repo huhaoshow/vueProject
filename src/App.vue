@@ -1,5 +1,7 @@
 <template>
   <div id="app">
+    <!-- 添加路由映射区域 -->
+    <router-view></router-view>
   </div>
 </template>
 
@@ -8,7 +10,7 @@
 export default {
   // 组件加载完成钩子函数
   mounted () {
-    this.$toast('登录成功')
+    // this.$toast('登录成功')
   }
 }
 </script>
