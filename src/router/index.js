@@ -8,6 +8,7 @@ import VueRouter from 'vue-router'
 // 引入需要映射的组件
 import Login from '@/views/Login.vue'
 import Personal from '@/views/Personal.vue'
+import EditPersonal from '@/views/EditPersonal.vue'
 
 // 将vue-router挂载到vue中
 Vue.use(VueRouter)
@@ -32,6 +33,12 @@ let router = new VueRouter({
       name: 'personal',
       path: '/personal/:id',
       component: Personal
+    },
+    {
+      // 编辑个人中心页
+      name: 'editPersonal',
+      path: '/editPersonal/:id',
+      component: EditPersonal
     }
   ]
 })
