@@ -1,4 +1,4 @@
-// 这个文件封装了api方法
+// 这个文件封装了用户信息相关的api方法
 
 // 引入配置好基准路径的axios
 import axios from '@/utils/myAxios.js'

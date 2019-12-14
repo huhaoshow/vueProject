@@ -6,7 +6,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 // 引入需要映射的组件
-import Login from '@/views/Login.vue'
+import Login from '@/views/login.vue'
 import Personal from '@/views/Personal.vue'
 import EditPersonal from '@/views/EditPersonal.vue'
 

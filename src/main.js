@@ -4,11 +4,12 @@ import App from './App.vue'
 import '@/style/reset.css'
 // 引入路由实例
 import router from '@/router/index.js'
-// 引入Toast轻提示
-import { Toast } from 'vant'
+// 引入vant组件
+import { Toast, Uploader } from 'vant'
 
 // 挂载成员
 Vue.use(Toast)
+Vue.use(Uploader)
 
 Vue.config.productionTip = false
 
