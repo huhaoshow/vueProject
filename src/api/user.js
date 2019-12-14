@@ -14,10 +14,10 @@ export const userLogin = (data) => {
 }
 
 // 获取用户数据
-export const getUserInfo = (data) => {
+export const getUserInfo = (id) => {
   return axios({
-    url: '/user/:id',
-    method: 'get',
-    data
+    // 根据后台的需求,需要用url传参
+    url: `/user/${id}`,
+    method: 'get'
   })
 }

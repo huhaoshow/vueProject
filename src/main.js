@@ -6,6 +6,8 @@ import '@/style/reset.css'
 import router from '@/router/index.js'
 // 引入Toast轻提示
 import { Toast } from 'vant'
+
+// 挂载成员
 Vue.use(Toast)
 
 Vue.config.productionTip = false
