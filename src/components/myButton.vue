@@ -1,5 +1,5 @@
 <template>
-<div :class="{login:type==='login'}" @click='handleClick'>
+<div class="btn" :class="{login:type==='login',back:type==='back'}" @click='handleClick'>
     <slot></slot>
 </div>
 </template>
@@ -20,15 +20,19 @@ export default {
 
 <style lang='less' scoped>
 // type=login时的按钮样式
-.login{
+.btn{
     width: 318*100vw/360;
     height: 48*100vw/360;
-    background-color: #cc3300;
     border-radius: 24*100vw/360;
     color: #fff;
     text-align: center;
     line-height: 48*100vw/360;
     font-size: 18px;
-
+}
+.login{
+  background-color: #c30;
+}
+.back{
+  background-color: #060;
 }
 </style>

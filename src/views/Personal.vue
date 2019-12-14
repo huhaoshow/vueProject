@@ -3,11 +3,11 @@
     <router-link :to='URL'>
       <div class="profile">
         <!-- $axios.defaults.baseURL读取axios的服务器路径 -->
-        <img :src="currentUserInfo.head_img" alt />
+        <img :src="UserInfo.head_img" alt />
         <div class="profile-center">
           <div class="name">
             <span class="iconfont iconxingbienan"></span>
-            {{currentUserInfo.nickname}}
+            {{UserInfo.nickname}}
           </div>
           <div class="time">2019-9-24</div>
         </div>
@@ -18,17 +18,20 @@
     <myCell title="我的跟帖" message='跟帖/回复'></myCell>
     <myCell title="我的收藏" message='文章/视频'></myCell>
     <myCell title="设置"></myCell>
+    <myButton type='back'>退出</myButton>
+
   </div>
 </template>
 
 <script>
 import { getUserInfo } from '@/api/user.js'
 import myCell from '@/components/myCell.vue'
+import myButton from '@/components/myButton.vue'
 export default {
   // 数据对象函数
   data () {
     return {
-      currentUserInfo: {},
+      UserInfo: {},
       URL: '/editPersonal/'
     }
   },
@@ -38,18 +41,20 @@ export default {
     let id = this.$route.params.id
     getUserInfo(id)
       .then((res) => {
-        console.log(res)
-        // 将返回的用户数据存到currentUserInfo中
-        this.currentUserInfo = res.data.data
-        // 将编辑个人信息定为变量,并带上id进行路由跳转
-        this.URL += this.currentUserInfo.id
-        console.log(this.currentUserInfo)
-        // 处理用户头像,加载用户头像,若用户没有设置则显示默认头像
-        if (this.currentUserInfo.head_img) {
+        if (res.data.message === '获取成功') {
+          // 将返回的用户数据存到UserInfo中
+          this.UserInfo = res.data.data
+          // 将编辑个人信息定为变量,并带上id进行路由跳转
+          this.URL += this.UserInfo.id
+          // 处理用户头像,加载用户头像,若用户没有设置则显示默认头像
+          if (this.UserInfo.head_img) {
           // 用户头像的路径为基准地址+图片的服务器地址
-          this.currentUserInfo.head_img = localStorage.getItem('baseURL') + this.currentUserInfo.head_img
+            this.UserInfo.head_img = localStorage.getItem('baseURL') + this.UserInfo.head_img
+          } else {
+            this.UserInfo.head_img = localStorage.getItem('baseURL') + '/uploads/image/default.jpg'
+          }
         } else {
-          this.currentUserInfo.head_img = localStorage.getItem('baseURL') + '/uploads/image/default.jpg'
+          this.$toast.fail(res.data.message)
         }
       }).catch((err) => {
         console.log(err)
@@ -57,7 +62,7 @@ export default {
       })
   },
   // 注册组件对象
-  components: { myCell }
+  components: { myCell, myButton }
 }
 </script>
 
@@ -99,6 +104,9 @@ a{
     color: #ccc;
     font-size: 18px;
     margin-top: 5px;
+  }
+  /deep/.btn{
+    margin: 0 auto;
   }
 }
 </style>

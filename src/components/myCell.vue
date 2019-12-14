@@ -31,7 +31,7 @@ export default {
         padding: 0 30px;
         font-size: 18px;
         >.right{
-            color: #666
+            color: #666;
         }
     }
 </style>
