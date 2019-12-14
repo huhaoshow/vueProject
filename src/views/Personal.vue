@@ -14,12 +14,16 @@
         <span class="iconfont iconjiantou1"></span>
       </div>
     </router-link>
-
+    <myCell title="我的关注" message='关注的用户'></myCell>
+    <myCell title="我的跟帖" message='跟帖/回复'></myCell>
+    <myCell title="我的收藏" message='文章/视频'></myCell>
+    <myCell title="设置"></myCell>
   </div>
 </template>
 
 <script>
 import { getUserInfo } from '@/api/user.js'
+import myCell from '@/components/myCell.vue'
 export default {
   // 数据对象函数
   data () {
@@ -48,7 +52,9 @@ export default {
         console.log(err)
         this.$toast.fail('服务器正忙,请稍后')
       })
-  }
+  },
+  // 注册组件对象
+  components: { myCell }
 }
 </script>
 
