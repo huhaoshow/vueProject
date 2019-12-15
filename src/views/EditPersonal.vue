@@ -17,7 +17,10 @@
       <van-field required ref="new" placeholder="请输入新密码" label="新密码" />
       <van-field required ref="confirm" placeholder="请确认新密码" label="确认新密码" />
     </van-dialog>
-    <myCell title="性别" :message='userInfo.gender?"男":"女"'></myCell>
+    <myCell title="性别" :message='userInfo.gender?"男":"女"' @click="genderShow=!genderShow"></myCell>
+    <van-dialog v-model="genderShow" title="修改昵称" show-cancel-button :before-close='updateGender'>
+      <van-picker :columns="['女','男']" :default-index='userInfo.gender' @change="getGender"/>
+    </van-dialog>
   </div>
 </template>
 
@@ -36,8 +39,8 @@ export default {
       userInfo: {},
       nicknameShow: false,
       pwdShow: false,
-      genderShow: false
-
+      genderShow: false,
+      genderIndex: 0
     }
   },
   //   组件加载完成钩子函数
@@ -77,7 +80,7 @@ export default {
         // 向服务器发请求,更新数据库上的头像信息
         let response = await editUser(this.id, { head_img: res.data.data.url })
         // 根据返回信息判断是否修改成功
-        if (response.data.message === '修改成功') {
+        if (res.status === 200) {
           // 给出提示,修改成功
           this.$toast.success(response.data.message)
           // 更新页面数据
@@ -107,7 +110,7 @@ export default {
         done()
       } else {
         let res = await editUser(this.id, { nickname: newNickname })
-        if (res.data.message === '修改成功') {
+        if (res.status === 200) {
           // 提示用户并更新页面
           this.$toast.success('修改成功')
           this.userInfo.nickname = newNickname
@@ -135,7 +138,7 @@ export default {
           } else {
             // 发请求修改密码
             let res = await editUser(this.id, { password: newPwd })
-            if (res.data.message === '修改成功') {
+            if (res.status === 200) {
               // 给出提示,并且退回到登录页面
               this.$toast.fail(res.data.message)
               this.$router.push({ name: 'login' })
@@ -155,6 +158,31 @@ export default {
       } else {
         this.$toast.fail('原密码错误,请重试！你个垃圾')
         done(false)
+      }
+    },
+    // 获取修改的性别
+    getGender (picker, value, index) {
+      this.genderIndex = index
+    },
+    // 修改性别
+    async updateGender (active, done) {
+      // 判断性别是否修改
+      if (active === 'confirm' && this.genderIndex === this.userInfo.gender) {
+        this.$toast.fail('你没有更改性别哦！')
+        done(false)
+      } else if (active === 'cancel') {
+        done()
+      } else {
+        let res = await editUser(this.id, { gender: this.genderIndex })
+        if (res.status === 200) {
+          // 给出提示并更新页面
+          this.$toast.success(res.data.message)
+          this.userInfo.gender = this.genderIndex
+          done()
+        } else {
+          this.$toast.fail(res.data.message)
+          done(false)
+        }
       }
     }
   }
