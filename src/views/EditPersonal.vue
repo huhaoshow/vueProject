@@ -11,7 +11,12 @@
     <van-dialog v-model="nicknameShow" title="修改昵称" show-cancel-button :before-close='updateNickname'>
       <van-field required ref="nickname" :value="userInfo.nickname" label="昵称" />
     </van-dialog>
-    <myCell title="密码" message='******'></myCell>
+    <myCell title="密码" message='******' @click="pwdShow=!pwdShow"></myCell>
+    <van-dialog v-model="pwdShow" title="修改密码" show-cancel-button :before-close='updatePwd'>
+      <van-field required ref="old" placeholder="请输入原密码" label="密码" />
+      <van-field required ref="new" placeholder="请输入新密码" label="新密码" />
+      <van-field required ref="confirm" placeholder="请确认新密码" label="确认新密码" />
+    </van-dialog>
     <myCell title="性别" :message='userInfo.gender?"男":"女"'></myCell>
   </div>
 </template>
@@ -29,7 +34,9 @@ export default {
     return {
       id: '',
       userInfo: {},
-      nicknameShow: false
+      nicknameShow: false,
+      pwdShow: false,
+      genderShow: false
 
     }
   },
@@ -59,41 +66,28 @@ export default {
   // 事件处理函数对象
   methods: {
     // 文件上传后触发
-    afterRead (file) {
-      console.log(file)
-      // 利用FormData来上传文件
+    async afterRead (file) {
+      // 获取文件参数,利用FormData来上传文件
       let formData = new FormData()
       formData.append('file', file.file)
       // 发起异步请求,实现文件上传
-      upload(formData)
-        .then((res) => {
-          console.log(res)
-          // 根据返回的数据来判断是否上传成功
-          if (res.data.message === '文件上传成功') {
-            // 向服务器发请求,更新数据库上的头像信息
-            editUser(this.id, { head_img: res.data.data.url })
-              .then((res) => {
-                // 根据返回信息判断是否修改成功
-                if (res.data.message === '修改成功') {
-                  // 给出提示,修改成功
-                  this.$toast.success(res.data.message)
-                  // 更新页面数据
-                  this.userInfo.head_img = localStorage.getItem('baseURL') + res.data.data.head_img
-                } else {
-                  this.$toast.fail('修改失败')
-                }
-              }).catch((err) => {
-                console.log(err)
-                this.$toast.fail('请求失败')
-              })
-          } else {
-            this.$toast.fail(res.data.message)
-          }
-        })
-        .catch((err) => {
-          console.log(err)
-          this.$toast.fail('请求失败')
-        })
+      let res = await upload(formData)
+      // 根据返回的数据来判断是否上传成功
+      if (res.data.message === '文件上传成功') {
+        // 向服务器发请求,更新数据库上的头像信息
+        let response = await editUser(this.id, { head_img: res.data.data.url })
+        // 根据返回信息判断是否修改成功
+        if (response.data.message === '修改成功') {
+          // 给出提示,修改成功
+          this.$toast.success(response.data.message)
+          // 更新页面数据
+          this.userInfo.head_img = localStorage.getItem('baseURL') + response.data.data.head_img
+        } else {
+          this.$toast.fail('修改失败')
+        }
+      } else {
+        this.$toast.fail(res.data.message)
+      }
     },
     // 更新昵称
     async updateNickname (action, done) {
@@ -113,13 +107,54 @@ export default {
         done()
       } else {
         let res = await editUser(this.id, { nickname: newNickname })
-        console.log(res)
         if (res.data.message === '修改成功') {
           // 提示用户并更新页面
           this.$toast.success('修改成功')
           this.userInfo.nickname = newNickname
           done()
         }
+      }
+    },
+    // 修改密码
+    async updatePwd (active, done) {
+      // 同理,在模态框消失前获取到三个框的值
+      let oldPwd = this.$refs.old.$refs.input.value
+      let newPwd = this.$refs.new.$refs.input.value
+      let confirmPwd = this.$refs.confirm.$refs.input.value
+      // 判断原密码是否输入正确
+      if (active === 'confirm' && oldPwd === this.userInfo.password) {
+        // 判断新密码和确认密码是否一致
+        if (newPwd === oldPwd) {
+          this.$toast.fail('不能和原密码重复,别瞎搞！')
+          done(false)
+        } else if (newPwd === confirmPwd) {
+          // 判断密码是否合法
+          if (!/\w{3,16}/.test(newPwd)) {
+            this.$toast.fail('密码只能是3~16位的数字,不许打汉字！')
+            done(false)
+          } else {
+            // 发请求修改密码
+            let res = await editUser(this.id, { password: newPwd })
+            if (res.data.message === '修改成功') {
+              // 给出提示,并且退回到登录页面
+              this.$toast.fail(res.data.message)
+              this.$router.push({ name: 'login' })
+              localStorage.removeItem('token')
+              done()
+            } else {
+              this.toast.fail(res.data.message)
+              done(false)
+            }
+          }
+        } else {
+          this.$toast.fail('确认新密码失败,写清楚点哦！')
+          done(false)
+        }
+      } else if (active === 'cancel') {
+        done()
+      } else {
+        this.$toast.fail('原密码错误,请重试！你个垃圾')
+        done(false)
       }
     }
   }
