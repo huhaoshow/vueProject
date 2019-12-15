@@ -5,11 +5,13 @@ import '@/style/reset.css'
 // 引入路由实例
 import router from '@/router/index.js'
 // 引入vant组件
-import { Toast, Uploader } from 'vant'
+import { Toast, Uploader, Dialog, Field } from 'vant'
 
 // 挂载成员
 Vue.use(Toast)
 Vue.use(Uploader)
+Vue.use(Dialog)
+Vue.use(Field)
 
 Vue.config.productionTip = false
 

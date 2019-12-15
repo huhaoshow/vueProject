@@ -7,7 +7,10 @@
         <img :src="userInfo.head_img" alt="">
         <van-uploader :after-read="afterRead" />
     </div>
-    <myCell title="昵称" :message='userInfo.nickname'></myCell>
+    <myCell title="昵称" :message='userInfo.nickname' @click="nicknameShow=!nicknameShow"></myCell>
+    <van-dialog v-model="nicknameShow" title="修改昵称" show-cancel-button :before-close='updateNickname'>
+      <van-field required ref="nickname" :value="userInfo.nickname" label="昵称" />
+    </van-dialog>
     <myCell title="密码" message='******'></myCell>
     <myCell title="性别" :message='userInfo.gender?"男":"女"'></myCell>
   </div>
@@ -25,7 +28,9 @@ export default {
   data () {
     return {
       id: '',
-      userInfo: {}
+      userInfo: {},
+      nicknameShow: false
+
     }
   },
   //   组件加载完成钩子函数
@@ -37,7 +42,6 @@ export default {
         if (res.data.message === '获取成功') {
           // 将返回的数据存在userInfo中,并存下id以备使用
           this.userInfo = res.data.data
-          console.log(this.userInfo)
           // 同样的方法处理头像
           if (this.userInfo.head_img) {
             this.userInfo.head_img = localStorage.getItem('baseURL') + this.userInfo.head_img
@@ -90,6 +94,33 @@ export default {
           console.log(err)
           this.$toast.fail('请求失败')
         })
+    },
+    // 更新昵称
+    async updateNickname (action, done) {
+      // 在关闭模态框前判断输入的昵称是否合法再发请求修改
+      // filed输入框的value值需要通过this.$refs.nickname.$refs.input.value来获取
+      let newNickname = this.$refs.nickname.$refs.input.value
+      if (action === 'confirm' && !newNickname) {
+        this.$toast.fail('昵称不能为空,你可以取名为憨憨')
+        done(false)
+      } else if (action === 'confirm' && newNickname.length >= 10) {
+        this.$toast.fail('昵称过长,不能超过10厘米')
+        done(false)
+      } else if (action === 'confirm' && newNickname === this.userInfo.nickname) {
+        this.$toast.fail('你是憨憨吗,这都没改动啊！')
+        done(false)
+      } else if (action === 'cancel') {
+        done()
+      } else {
+        let res = await editUser(this.id, { nickname: newNickname })
+        console.log(res)
+        if (res.data.message === '修改成功') {
+          // 提示用户并更新页面
+          this.$toast.success('修改成功')
+          this.userInfo.nickname = newNickname
+          done()
+        }
+      }
     }
   }
 }
