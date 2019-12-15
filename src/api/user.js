@@ -21,3 +21,12 @@ export const getUserInfo = (id) => {
     method: 'get'
   })
 }
+
+// 注册用户
+export const userRegister = (data) => {
+  return axios({
+    url: '/register',
+    method: 'post',
+    data
+  })
+}

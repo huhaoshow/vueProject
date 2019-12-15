@@ -9,6 +9,8 @@ import VueRouter from 'vue-router'
 import Login from '@/views/login.vue'
 import Personal from '@/views/Personal.vue'
 import EditPersonal from '@/views/EditPersonal.vue'
+import Register from '@/views/Register.vue'
+import Index from '@/views/Index.vue'
 
 // 将vue-router挂载到vue中
 Vue.use(VueRouter)
@@ -39,6 +41,18 @@ let router = new VueRouter({
       name: 'editPersonal',
       path: '/editPersonal/:id',
       component: EditPersonal
+    },
+    {
+      // 注册页面
+      name: 'register',
+      path: '/register',
+      component: Register
+    },
+    {
+      // 首页
+      name: 'index',
+      path: '/index',
+      component: Index
     }
   ]
 })

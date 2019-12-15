@@ -3,7 +3,7 @@
     <router-link :to='URL'>
       <div class="profile">
         <!-- $axios.defaults.baseURL读取axios的服务器路径 -->
-        <img :src="UserInfo.head_img" alt />
+        <img :src="UserInfo.head_img" alt='' />
         <div class="profile-center">
           <div class="name">
             <span class="iconfont iconxingbienan"></span>
@@ -18,7 +18,7 @@
     <myCell title="我的跟帖" message='跟帖/回复'></myCell>
     <myCell title="我的收藏" message='文章/视频'></myCell>
     <myCell title="设置"></myCell>
-    <myButton type='back'>退出</myButton>
+    <myButton type='back' class="exitBtn" @click="exit">退出</myButton>
 
   </div>
 </template>
@@ -62,7 +62,14 @@ export default {
       })
   },
   // 注册组件对象
-  components: { myCell, myButton }
+  components: { myCell, myButton },
+  // 事件方法函数对象
+  methods: {
+    exit () {
+      localStorage.removeItem('token')
+      this.$router.push({ name: 'index' })
+    }
+  }
 }
 </script>
 
@@ -105,8 +112,8 @@ a{
     font-size: 18px;
     margin-top: 5px;
   }
-  /deep/.btn{
-    margin: 0 auto;
-  }
 }
+/deep/.exitBtn{
+    margin: 50px auto;
+  }
 </style>

@@ -1,5 +1,5 @@
 <template>
-<div class="btn" :class="{login:type==='login',back:type==='back'}" @click='handleClick'>
+<div class="btn" :class="{login:type==='login',back:type==='back',register:type==='register'}" @click='handleClick'>
     <slot></slot>
 </div>
 </template>
@@ -34,5 +34,8 @@ export default {
 }
 .back{
   background-color: #060;
+}
+.register{
+  background-color: skyblue;
 }
 </style>

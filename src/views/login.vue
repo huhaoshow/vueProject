@@ -8,7 +8,9 @@
   :rules='/^1\d{10}$/' err_msg='用户名格式错误'></myInput>
       <myInput type='password' v-model="user.password"></myInput>
     </div>
-    <p class="tips">没有账号？<a href="#/register" class="">去注册</a></p>
+    <p class="tips">没有账号？
+      <router-link to="/register">去注册</router-link>
+    </p>
     <myButton type='login' @click='login'>登录</myButton>
     </div>
   </div>
@@ -44,7 +46,6 @@ export default {
           // 如果验证成功,页面跳转到个人中心页并将token值存入,否则提示用户名不存在
           if (res.data.message === '登录成功') {
             localStorage.setItem('token', res.data.data.token)
-            console.log(res)
             this.$router.push({ path: `/personal/${res.data.data.user.id}` })
           } else if (res.data.message === '用户不存在') {
             this.$toast.fail(res.data.message)
