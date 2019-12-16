@@ -20,11 +20,6 @@ let router = new VueRouter({
   // 配置路由
   routes: [
     {
-      name: 'first',
-      path: '/',
-      redirect: { name: 'login' }
-    },
-    {
       // 登录页
       name: 'login',
       path: '/login',
@@ -51,7 +46,7 @@ let router = new VueRouter({
     {
       // 首页
       name: 'index',
-      path: '/index',
+      path: '/',
       component: Index
     }
   ]
