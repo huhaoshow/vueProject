@@ -60,6 +60,7 @@ export default {
       // 获取当前所在栏目的文章
       this.renderArticleList()
     } else { this.$toast.fail(res.data.message) }
+    console.log(this.categoryList[this.active].articleList)
   },
   // 注册组件对象
   components: { articleBlock },
@@ -72,7 +73,6 @@ export default {
         pageSize: this.categoryList[this.active].pageSize,
         category: this.categoryList[this.active].id
       })
-      console.log(res)
       if (res.status === 200) {
         // 将获取到的内容追加到原先的数组中
         this.categoryList[this.active].articleList.push(...res.data.data)
@@ -90,27 +90,22 @@ export default {
     onRefresh () {
       // 请求页码重置为1
       this.categoryList[this.active].pageIndex = 1
-      console.log(this.categoryList[this.active].pageIndex)
+      // 下拉刷新时将finished重置为false,否则无法再次进行上拉加载更多
       this.categoryList[this.active].finished = false
       // 重新请求第一页数据
-      setTimeout(() => {
-        // 将原先加载的内容清空
-        this.categoryList[this.active].articleList.length = 0
-        this.renderArticleList()
-        // 数据请求完成后关闭下拉刷新,并将finished重置为false
-        this.categoryList[this.active].isLoading = false
-      }, 1000)
+      // 将原先加载的内容清空
+      this.categoryList[this.active].articleList.length = 0
+      this.renderArticleList()
+      // 数据请求完成后关闭下拉刷新
+      this.categoryList[this.active].isLoading = false
     },
     // 上拉加载更多
     onLoad () {
+      console.log('加载')
       // 请求页码+1
       this.categoryList[this.active].pageIndex += 1
-      console.log(this.categoryList[this.active].pageIndex)
       // 继续请求下一页数据
-      setTimeout(() => {
-        // 请求数据
-        this.renderArticleList()
-      }, 1000)
+      this.renderArticleList()
     }
   },
   // 监听对象
