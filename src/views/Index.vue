@@ -5,7 +5,7 @@
       <div class="center">
         <van-icon name="search" />&nbsp;&nbsp;&nbsp;搜索商品
       </div>
-      <van-icon name="manager-o" class="icon" />
+      <van-icon name="manager-o" class="icon" @click="jump"/>
     </div>
     <div class="title">
       <van-tabs v-model="active" sticky swipeable>
@@ -60,7 +60,6 @@ export default {
       // 获取当前所在栏目的文章
       this.renderArticleList()
     } else { this.$toast.fail(res.data.message) }
-    console.log(this.categoryList[this.active].articleList)
   },
   // 注册组件对象
   components: { articleBlock },
@@ -106,6 +105,15 @@ export default {
       this.categoryList[this.active].pageIndex += 1
       // 继续请求下一页数据
       this.renderArticleList()
+    },
+    // 跳转到中心页
+    jump () {
+      let token = localStorage.getItem('token')
+      if (token) {
+        this.$router.push({ path: `/personal/${localStorage.getItem('id')}` })
+      } else {
+        this.$router.push({ name: 'login' })
+      }
     }
   },
   // 监听对象

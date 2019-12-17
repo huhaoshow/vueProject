@@ -18,7 +18,10 @@
     <myCell title="我的跟帖" message='跟帖/回复'></myCell>
     <myCell title="我的收藏" message='文章/视频'></myCell>
     <myCell title="设置"></myCell>
-    <myButton type='back' class="exitBtn" @click="exit">退出</myButton>
+    <div class="back">
+      <myButton type='back' class="exitBtn" @click="exit">退出</myButton>
+      <myButton type='back' class="logOut" @click="logOut">注销</myButton>
+    </div>
 
   </div>
 </template>
@@ -63,9 +66,15 @@ export default {
   components: { myCell, myButton },
   // 事件方法函数对象
   methods: {
+    // 退出不注销账号转到首页
     exit () {
-      localStorage.removeItem('token')
       this.$router.push({ name: 'index' })
+    },
+    // 注销退出到登录页面
+    logOut () {
+      localStorage.removeItem('token')
+      localStorage.removeItem('id')
+      this.$router.push({ name: 'login' })
     }
   }
 }
@@ -111,7 +120,9 @@ a{
     margin-top: 5px;
   }
 }
-/deep/.exitBtn{
-    margin: 50px auto;
-  }
+/deep/ .back{
+  display: flex;
+  margin: 30px auto;
+  justify-content: space-evenly;
+}
 </style>

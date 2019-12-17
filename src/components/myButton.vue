@@ -33,6 +33,8 @@ export default {
   background-color: #c30;
 }
 .back{
+  width: 100*100vw/360;
+  border-radius: 12*100vw/360;
   background-color: #060;
 }
 .register{
