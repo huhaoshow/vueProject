@@ -1,6 +1,6 @@
 <template>
   <div class="personal">
-    <router-link :to='URL'>
+    <router-link :to='"/editPersonal/"+UserInfo.id'>
       <div class="profile">
         <!-- $axios.defaults.baseURL读取axios的服务器路径 -->
         <img :src="UserInfo.head_img" alt='' />
@@ -44,8 +44,6 @@ export default {
         if (res.data.message === '获取成功') {
           // 将返回的用户数据存到UserInfo中
           this.UserInfo = res.data.data
-          // 将编辑个人信息定为变量,并带上id进行路由跳转
-          this.URL += this.UserInfo.id
           // 处理用户头像,加载用户头像,若用户没有设置则显示默认头像
           if (this.UserInfo.head_img) {
           // 用户头像的路径为基准地址+图片的服务器地址

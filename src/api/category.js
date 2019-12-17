@@ -3,7 +3,7 @@
 import axios from '@/utils/myAxios.js'
 
 // 获取栏目列表
-export const getCategory = () => {
+export const getCategoryList = () => {
   return axios({
     url: '/category'
   })
