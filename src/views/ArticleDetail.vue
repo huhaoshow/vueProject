@@ -41,12 +41,16 @@
       </div>
       <div class="more">更多跟帖</div>
     </div>
+    <div class="comment">
+      <commentArea :article='article'></commentArea>
+    </div>
   </div>
 </template>
 
 <script>
 import { getArticleDetail, likeArticle } from '@/api/article.js'
 import { followUser, unFollowUser } from '@/api/user.js'
+import commentArea from '@/components/commentArea.vue'
 
 export default {
   // 数据函数对象
@@ -56,6 +60,8 @@ export default {
       articleId: ''
     }
   },
+  // 注册组件对象
+  components: { commentArea },
   // 组件加载完成钩子函数
   async mounted () {
     // 跳转到详情页后获取传过来的id并发请求获取当前数据判断是文章还是视频,然后进行页面渲染
@@ -63,7 +69,6 @@ export default {
     let res = await getArticleDetail(this.articleId)
     if (res.status === 200) {
       this.article = res.data.data
-      console.log(this.article)
     } else {
       this.$toast.fail('页面请求失败')
     }
@@ -100,16 +105,20 @@ export default {
       // 由于点赞和取消点赞都是同一个接口,所以发起请求后,根据返回结果来确定是点赞还是取消点赞
       let res = await likeArticle(this.article.user.id)
       // 如果返回结果是点赞成功,则之前未点赞,若是取消成功,则之前是点赞
-      if (res.data.message === '点赞成功') {
-        // 更新页面点赞状态为已点赞,并使得点赞数+1,
-        this.article.has_like = true
-        this.article.comment_length++
-      } else if (res.data.message === '取消成功') {
-        // 更新页面点赞状态为未点赞,并使得点赞数-1,
-        this.article.has_like = false
-        this.article.comment_length--
+      if (res.status === 200) {
+        // 更新页面上的点赞状态
+        this.article.has_like = !this.article.has_like
+        if (res.data.message === '点赞成功') {
+        // 点赞数+1
+          this.article.comment_length++
+        } else if (res.data.message === '取消成功') {
+        // 点赞数-1
+          this.article.comment_length--
+        }
+        // 给出状态提示
+        this.$toast.success(res.data.message)
       } else {
-        this.$toast.fail('操作失败')
+        this.$toast.fail(res.data.message)
       }
     }
   }
@@ -187,6 +196,7 @@ export default {
 .keeps {
   border-top: 5px solid #ddd;
   padding: 0 15px;
+  margin-bottom: 50px;
   > h2 {
     line-height: 50px;
     text-align: center;
@@ -252,5 +262,11 @@ video{
         width: 100%!important;
         display: block;
     }
+}
+// /deep/.comment{
+//   margin-top: 50px;
+// }
+.articleDetail{
+  padding-bottom: 50px;
 }
 </style>
