@@ -17,7 +17,7 @@
             <van-pull-refresh v-model="category.isLoading" success-text='刷新成功' @refresh="onRefresh">
               <!-- 在当前循环的category中再次进行循环 -->
               <articleBlock v-for="article in category.articleList" :key="article.id" :article='article'></articleBlock>
-          </van-pull-refresh>
+            </van-pull-refresh>
         </van-list>
         </van-tab>
       </van-tabs>
@@ -100,7 +100,6 @@ export default {
     },
     // 上拉加载更多
     onLoad () {
-      console.log('加载')
       // 请求页码+1
       this.categoryList[this.active].pageIndex += 1
       // 继续请求下一页数据
@@ -110,7 +109,8 @@ export default {
     jump () {
       let token = localStorage.getItem('token')
       if (token) {
-        this.$router.push({ path: `/personal/${localStorage.getItem('id')}` })
+        let id = localStorage.getItem('id')
+        this.$router.push({ name: 'personal', params: { id } })
       } else {
         this.$router.push({ name: 'login' })
       }

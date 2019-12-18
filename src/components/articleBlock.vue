@@ -1,39 +1,41 @@
 <template>
-  <!--  左字右图 -->
-  <div class="single" v-if="article.cover.length <= 2 && article.type === 1">
-    <div class="left">
-      <p class="content">{{article.title}}</p>
+  <div @click="$router.push({name:'articleDetail',params:{id:article.id}})">
+    <!--  左字右图 -->
+    <div class="single" v-if="article.cover.length <= 2 && article.type === 1">
+      <div class="left">
+        <p class="content">{{article.title}}</p>
+        <p class="info">
+          <span>{{article.user.nickname}}</span>
+          <span>{{article.comment_length}}跟帖</span>
+        </p>
+      </div>
+      <img :src="article.cover[0].url" alt />
+    </div>
+    <!-- 上字下图 -->
+    <div class="much" v-else-if="article.cover.length > 2 && article.type === 1">
+      <p class="content" style="padding: 0px 5px;">{{article.title}}</p>
+      <div class="imgs">
+        <img v-for="item in article.cover" :key="item.id" :src="item.url" alt />
+      </div>
       <p class="info">
         <span>{{article.user.nickname}}</span>
         <span>{{article.comment_length}}跟帖</span>
       </p>
     </div>
-    <img :src="article.cover[0].url" alt />
-  </div>
-  <!-- 上字下图 -->
-  <div class="much" v-else-if="article.cover.length > 2 && article.type === 1">
-    <p class="content" style="padding: 0px 5px;">{{article.title}}</p>
-    <div class="imgs">
-      <img v-for="item in article.cover" :key="item.id" :src="item.url" alt />
-    </div>
-    <p class="info">
-      <span>{{article.user.nickname}}</span>
-      <span>{{article.comment_length}}跟帖</span>
-    </p>
-  </div>
-  <!-- 视频 -->
-  <div class="video" v-else-if="article.type === 2">
-    <p class="content" style="padding: 0px 5px;">{{article.title}}</p>
-    <div class="myvideo">
-      <img :src="article.cover[0].url" alt />
-      <div class="playbtn">
-        <van-icon name="play" />
+    <!-- 视频 -->
+    <div class="video" v-else-if="article.type === 2">
+      <p class="content" style="padding: 0px 5px;">{{article.title}}</p>
+      <div class="myvideo">
+        <img :src="article.cover[0].url" alt />
+        <div class="playbtn">
+          <van-icon name="play" />
+        </div>
       </div>
+      <p class="info">
+        <span>{{article.user.nickname}}</span>
+        <span>{{article.comment_length}}跟帖</span>
+      </p>
     </div>
-    <p class="info">
-      <span>{{article.user.nickname}}</span>
-      <span>{{article.comment_length}}跟帖</span>
-    </p>
   </div>
 </template>
 

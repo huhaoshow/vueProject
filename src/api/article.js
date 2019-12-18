@@ -9,3 +9,26 @@ export const getArticleList = (params) => {
     params
   })
 }
+// 文章详情
+export const getArticleDetail = (id) => {
+  return axios({
+    url: `/post/${id}`,
+    method: 'get'
+  })
+}
+// 评论列表
+export const getCommentList = (id) => {
+  return axios({
+    url: `/post_comment/${id}`,
+    method: 'get'
+
+  })
+}
+
+// 点赞文章
+export const likeArticle = (id) => {
+  return axios({
+    url: `/post_like/${id}`,
+    method: 'get'
+  })
+}

@@ -11,6 +11,7 @@ import Personal from '@/views/Personal.vue'
 import EditPersonal from '@/views/EditPersonal.vue'
 import Register from '@/views/Register.vue'
 import Index from '@/views/Index.vue'
+import ArticleDetail from '@/views/ArticleDetail.vue'
 
 // 将vue-router挂载到vue中
 Vue.use(VueRouter)
@@ -48,6 +49,12 @@ let router = new VueRouter({
       name: 'index',
       path: '/',
       component: Index
+    },
+    // 详情页
+    {
+      name: 'articleDetail',
+      path: '/articleDetail/:id',
+      component: ArticleDetail
     }
   ]
 })

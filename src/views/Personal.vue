@@ -34,8 +34,7 @@ export default {
   // 数据对象函数
   data () {
     return {
-      UserInfo: {},
-      URL: '/editPersonal/'
+      UserInfo: {}
     }
   },
   // 组件加载完毕钩子函数
